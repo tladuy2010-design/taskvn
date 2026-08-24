@@ -1,0 +1,9 @@
+rules_version='2';service cloud.firestore{match /databases/{db}/documents{
+function in(){return request.auth!=null} function admin(){return in()&&get(/databases/$(db)/documents/profiles/$(request.auth.uid)).data.role in ['admin','owner']}
+match /profiles/{id}{allow read:if in()&&(request.auth.uid==id||admin());allow create:if in()&&request.auth.uid==id;allow update:if in()&&request.auth.uid==id&&!request.resource.data.diff(resource.data).affectedKeys().hasAny(['balance','role','is_owner']);allow delete:if admin()}
+match /tasks/{id}{allow read:if in();allow write:if admin()}
+match /claims/{id}{allow read:if in()&&(resource.data.userId==request.auth.uid||admin());allow create:if in()&&request.resource.data.userId==request.auth.uid;allow update,delete:if admin()}
+match /payments/{id}{allow read:if in()&&(resource.data.userId==request.auth.uid||admin());allow create:if in()&&request.resource.data.userId==request.auth.uid;allow update,delete:if admin()}
+match /cardOrders/{id}{allow read:if in()&&(resource.data.userId==request.auth.uid||admin());allow create:if in()&&request.resource.data.userId==request.auth.uid;allow update,delete:if admin()}
+match /proofs/{id}{allow read:if in()&&(resource.data.userId==request.auth.uid||admin());allow create:if in()&&request.resource.data.userId==request.auth.uid;allow update,delete:if admin()}
+}}

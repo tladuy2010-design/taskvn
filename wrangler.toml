@@ -1,0 +1,16 @@
+name = "taskvn"
+main = "worker.js"
+compatibility_date = "2026-08-24"
+
+[vars]
+ENVIRONMENT = "production"
+
+# Create these bindings in Cloudflare:
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "taskvn"
+# database_id = "YOUR_D1_DATABASE_ID"
+#
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "YOUR_KV_NAMESPACE_ID"

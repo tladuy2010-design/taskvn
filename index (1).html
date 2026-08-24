@@ -1,0 +1,12 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TASKVN Admin</title><link rel="stylesheet" href="admin.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../config.js"></script></head><body><aside><b>TASK<span>VN</span></b><p>ADMIN PANEL</p><button data-tab="dashboard">📊 Tổng quan</button><button data-tab="tasks">🎯 Nhiệm vụ</button><button data-tab="claims">🧾 Duyệt nhiệm vụ</button><button data-tab="proofs">🖼️ Duyệt ảnh Review</button><button data-tab="users">👥 Người dùng</button><button data-tab="admins">👑 Quản lý Admin</button><button data-tab="topups">💳 Nạp tiền</button><button data-tab="payouts">💰 Auto Payout</button><button data-tab="withdrawals">💸 Rút tiền</button><button data-tab="ai">🤖 TASKVN AI</button><button data-tab="web2">🛍️ Web 2</button><button data-tab="levels">🏆 Cấp & EXP</button><button data-tab="ledger">📒 Ledger</button><button data-tab="fraud">🛡️ Chống gian lận</button><button data-tab="settings">⚙️ Cài đặt</button></aside><main><header><h1 id="title">Tổng quan</h1><span id="status">Đang kiểm tra quyền...</span></header><section id="content"></section></main><script src="admin.js"></script>
+<script>
+window.TASKVN_COOLDOWN={
+ format(sec){sec=Math.max(0,Math.floor(sec));const d=Math.floor(sec/86400);sec%=86400;
+ const h=String(Math.floor(sec/3600)).padStart(2,"0");sec%=3600;
+ const m=String(Math.floor(sec/60)).padStart(2,"0");const s=String(sec%60).padStart(2,"0");
+ return d?`${d}d ${h}:${m}:${s}`:`${h}:${m}:${s}`;},
+ start(el,seconds,onDone){let left=Math.max(0,Number(seconds)||0);
+ const tick=()=>{if(!el)return;if(left<=0){el.textContent="Làm nhiệm vụ";onDone&&onDone();return}
+ el.textContent="Còn "+this.format(left);left--;setTimeout(tick,1000)};tick();}
+};
+</script></body></html>

@@ -1,0 +1,243 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TASKVN</title><link rel="stylesheet" href="styles.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+<style>
+:root{--bg:#05030a;--panel:#11091d;--panel2:#170d28;--line:#ffffff12;--pink:#ff2eb8;--violet:#8b4dff;--cyan:#52e7ff;--gold:#ffc83d}
+*{box-sizing:border-box}body{background:radial-gradient(circle at 8% 0,#8b4dff35,transparent 28%),radial-gradient(circle at 95% 5%,#ff2eb82b,transparent 25%),radial-gradient(circle at 50% 100%,#52e7ff0c,transparent 35%),var(--bg)!important;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:linear-gradient(#fff3 1px,transparent 1px),linear-gradient(90deg,#fff3 1px,transparent 1px);background-size:36px 36px;opacity:.035;animation:grid 18s linear infinite}
+@keyframes grid{to{background-position:72px 72px}}
+.logo{font-weight:1000;letter-spacing:-1.5px;text-shadow:0 0 20px #ff2eb866;animation:logo 3s ease-in-out infinite}
+.logo span{background:linear-gradient(90deg,#ff3fbd,#8b4dff,#52e7ff);-webkit-background-clip:text;color:transparent}
+@keyframes logo{50%{filter:brightness(1.18);transform:translateY(-1px)}}
+.card{border-color:#ffffff13!important;box-shadow:0 18px 55px #0009,0 0 30px #8b4dff08!important;transition:.25s}
+.card:hover{transform:translateY(-3px);border-color:#ffffff22!important}
+button{transition:.18s}button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.shortcuts button{animation:floatIcon 4s ease-in-out infinite}.shortcuts button:nth-child(2){animation-delay:.2s}.shortcuts button:nth-child(3){animation-delay:.4s}.shortcuts button:nth-child(4){animation-delay:.6s}
+@keyframes floatIcon{50%{transform:translateY(-4px)}}
+#balance{font-weight:1000;text-shadow:0 0 20px #ffc83d55}
+#aiFab{position:fixed;right:18px;bottom:88px;width:60px;height:60px;border:0;border-radius:20px;background:linear-gradient(135deg,#8b4dff,#ff2eb8);color:#fff;font-size:27px;box-shadow:0 0 38px #ff2eb866;z-index:30;animation:aiFloat 3s ease-in-out infinite}
+@keyframes aiFloat{50%{transform:translateY(-8px) rotate(2deg)}}
+#aiPanel{position:fixed;right:14px;bottom:82px;width:min(390px,calc(100% - 28px));height:510px;background:#0b0714f5;border:1px solid #fff2;border-radius:23px;z-index:40;display:none;flex-direction:column;overflow:hidden;box-shadow:0 30px 100px #000}
+#aiPanel.open{display:flex;animation:aiOpen .2s ease}@keyframes aiOpen{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.aiHead{padding:13px;display:flex;gap:9px;align-items:center;border-bottom:1px solid #fff1}.aiIcon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#8b4dff,#ff2eb8);font-size:22px}.aiBody{flex:1;overflow:auto;padding:12px}.aiBubble{max-width:90%;padding:10px 12px;border-radius:14px;background:#1a102a;margin-bottom:8px;font-size:12px;line-height:1.5}.aiBubble.me{margin-left:auto;background:linear-gradient(135deg,#6f40ff,#d52caf)}.aiForm{display:flex;gap:7px;padding:9px;border-top:1px solid #fff1}.aiForm input{flex:1}
+</style>
+</head><body>
+
+<div id="taskvn-welcome" class="taskvn-welcome">
+  <div class="tw-bg"></div>
+  <header class="tw-header">
+    <div class="tw-brand">
+      <div class="tw-logo">TV</div>
+      <div><b>TASKVN</b><span>KIẾM TIỀN ONLINE</span></div>
+    </div>
+    <button class="tw-login" id="tw-login-top">Đăng nhập</button>
+  </header>
+
+  <main class="tw-main">
+    <section class="tw-hero">
+      <div class="tw-badge">⚡ HỆ THỐNG TASKVN</div>
+      <h1>Làm nhiệm vụ.<br><em>Nhận thưởng.</em></h1>
+      <p>Hoàn thành các nhiệm vụ được kiểm tra tự động, theo dõi số dư và quản lý phần thưởng ngay trên một hệ thống.</p>
+      <div class="tw-actions">
+        <button class="tw-primary" id="tw-register">🚀 Tạo tài khoản</button>
+        <button class="tw-secondary" id="tw-login">Đăng nhập</button>
+      </div>
+      <div class="tw-trust">
+        <span>🔐 Xác thực tài khoản</span>
+        <span>🛡️ Kiểm tra nhiệm vụ</span>
+        <span>💰 Ledger giao dịch</span>
+      </div>
+    </section>
+
+    <section class="tw-features">
+      <div class="tw-card"><i>🎯</i><b>Nhiệm vụ đa dạng</b><span>Admin có thể cấu hình nhiệm vụ và mức thưởng riêng.</span></div>
+      <div class="tw-card"><i>⚡</i><b>Claim an toàn</b><span>Mỗi lượt có mã claim riêng và chỉ sử dụng được một lần.</span></div>
+      <div class="tw-card"><i>📊</i><b>Theo dõi rõ ràng</b><span>Xem tiến độ, số dư và lịch sử hoạt động của tài khoản.</span></div>
+    </section>
+  </main>
+
+  <footer class="tw-footer">© TASKVN • Hệ thống nhiệm vụ online</footer>
+</div>
+<style>
+.taskvn-welcome{position:fixed;inset:0;z-index:9000;overflow:auto;color:#fff;background:#06040b;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.tw-bg{position:absolute;inset:0;background:radial-gradient(circle at 12% 18%,#ff2bb722,transparent 28%),radial-gradient(circle at 88% 20%,#784cff28,transparent 30%),radial-gradient(circle at 52% 90%,#ff2bb70d,transparent 34%),linear-gradient(135deg,#07040d,#11061a 52%,#06040b)}
+.tw-bg:after{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff05 1px,transparent 1px),linear-gradient(90deg,#ffffff05 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
+.tw-header{height:76px;max-width:1240px;margin:auto;padding:0 30px;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.tw-brand{display:flex;align-items:center;gap:12px}.tw-brand b{display:block;font-size:20px;letter-spacing:1px}.tw-brand span{display:block;margin-top:2px;font-size:9px;color:#9f95aa;letter-spacing:2px}
+.tw-logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-weight:1000;background:linear-gradient(135deg,#ff2bb7,#704cff);box-shadow:0 0 30px #ff2bb744}
+.tw-login{padding:11px 20px;border:1px solid #ffffff18;border-radius:12px;background:#ffffff08;color:#fff;font-weight:800;cursor:pointer;transition:.2s}.tw-login:hover{background:#ffffff12;transform:translateY(-1px)}
+.tw-main{max-width:1240px;min-height:calc(100vh - 130px);margin:auto;padding:45px 30px 30px;position:relative;z-index:1}
+.tw-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:70px;align-items:center;max-width:1160px;margin:0 auto}
+.tw-copy{text-align:left}.tw-badge{display:inline-flex;padding:8px 13px;border:1px solid #ff4bc733;background:#ff2bb70d;border-radius:99px;color:#ffb8e6;font-size:11px;font-weight:900;letter-spacing:.8px}
+.tw-hero h1{font-size:clamp(54px,6vw,86px);line-height:.96;margin:22px 0 22px;letter-spacing:-4px;max-width:720px}.tw-hero h1 em{font-style:normal;background:linear-gradient(90deg,#ff3ab9,#8c63ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tw-hero p{max-width:650px;color:#aaa0b3;font-size:16px;line-height:1.8;margin:0}
+.tw-actions{display:flex;gap:12px;margin:30px 0 20px}.tw-actions button{padding:14px 22px;border-radius:13px;font-weight:900;cursor:pointer;transition:.2s}.tw-actions button:hover{transform:translateY(-2px)}
+.tw-primary{border:0;background:linear-gradient(90deg,#ff2bb7,#744bff);color:#fff;box-shadow:0 14px 38px #8b42ff32}.tw-secondary{border:1px solid #ffffff18;background:#ffffff08;color:#fff}
+.tw-trust{display:flex;gap:18px;flex-wrap:wrap;color:#8d8396;font-size:10px}
+.tw-preview{position:relative;min-height:390px;display:grid;place-items:center}
+.tw-preview:before{content:"";position:absolute;width:310px;height:310px;border-radius:50%;background:#8b4dff20;filter:blur(55px)}
+.tw-window{position:relative;width:min(450px,100%);border:1px solid #ffffff13;border-radius:25px;background:linear-gradient(145deg,#17101fdd,#09060edb);box-shadow:0 35px 100px #0009,0 0 55px #8b4dff18;padding:17px;transform:perspective(1000px) rotateY(-4deg)}
+.tw-window-top{display:flex;gap:7px;margin-bottom:17px}.tw-dot{width:8px;height:8px;border-radius:50%;background:#ffffff22}.tw-panel{padding:20px;border-radius:18px;background:#ffffff05;border:1px solid #ffffff0b}.tw-panel-title{font-size:11px;color:#9990a5;margin-bottom:8px}.tw-balance{font-size:34px;font-weight:950}.tw-mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}.tw-mini{padding:14px;border-radius:14px;background:#ffffff06;border:1px solid #ffffff09}.tw-mini b{display:block;font-size:15px}.tw-mini span{font-size:9px;color:#8d8396}
+.tw-features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1160px;margin:65px auto 0}.tw-card{padding:21px;border:1px solid #ffffff0e;background:#ffffff05;border-radius:18px;display:flex;flex-direction:column;gap:8px;box-shadow:inset 0 1px #ffffff08;transition:.22s}.tw-card:hover{transform:translateY(-4px);border-color:#b56dff35;background:#ffffff08}.tw-card i{font-style:normal;font-size:26px}.tw-card b{font-size:14px}.tw-card span{font-size:11px;line-height:1.65;color:#9990a3}
+.tw-footer{position:relative;z-index:1;text-align:center;padding:15px;color:#68606f;font-size:10px}
+@media(max-width:900px){.tw-hero{grid-template-columns:1fr;gap:35px}.tw-copy{text-align:center}.tw-hero p{margin:auto}.tw-actions,.tw-trust{justify-content:center}.tw-preview{min-height:320px}.tw-features{margin-top:40px}}
+@media(max-width:650px){.tw-header{height:68px;padding:0 16px}.tw-main{padding:30px 16px}.tw-brand b{font-size:17px}.tw-brand span{font-size:8px}.tw-logo{width:42px;height:42px}.tw-login{padding:9px 14px}.tw-hero h1{font-size:48px;letter-spacing:-2.5px}.tw-hero p{font-size:14px}.tw-actions{flex-direction:column}.tw-actions button{width:100%}.tw-preview{min-height:270px}.tw-window{transform:none}.tw-features{grid-template-columns:1fr;margin-top:30px}}
+</style>
+<header><b class="logo">TASK<span>VN</span></b><button id="auth">Đăng nhập</button></header><main><section class="card profile"><div class="avatar">T</div><div><small>TÀI KHOẢN</small><h2 id="name">TaskVN User</h2><small id="level">Cấp độ 1 · EXP 0</small></div></section><section class="card wallet"><small>SỐ DƯ COIN</small><strong id="balance">0</strong><div><button id="deposit">Nạp COIN</button><button id="shop" onclick="location.href='shop.html'">🛍️ Web 2</button><button id="withdraw">Rút COIN</button></div></section><section class="shortcuts"><button id="adminHidden" style="display:none" onclick="location.href='admin/'">⚙️<small>Admin</small></button><button data-p="tasks">🎯<small>Nhiệm vụ</small></button><button data-p="traffic">🚀<small>Traffic</small></button><button data-p="history">🧾<small>Lịch sử</small></button><button data-p="profile">👤<small>Hồ sơ</small></button></section><h2>Nhiệm vụ</h2><div id="tasks"></div><section class="card"><h3>📝 Nhiệm vụ Review Map</h3><p>Hoàn thành review, chụp ảnh bằng chứng và gửi Admin. Sau khi Admin duyệt, nhiệm vụ được đặt lịch cộng tiền sau 4 ngày.</p><button class="do" onclick="openReviewUpload()">Gửi ảnh bằng chứng</button></section></main><nav><button data-p="home">⌂<small>Trang chủ</small></button><button data-p="tasks">☑<small>Nhiệm vụ</small></button><button class="plus">＋</button><button data-p="history">▤<small>Lịch sử</small></button><button data-p="profile">♙<small>Hồ sơ</small></button></nav>
+<div id="modal"></div>
+<button id="aiFab" onclick="toggleAI()">🤖</button>
+<section id="aiPanel">
+ <div class="aiHead"><div class="aiIcon">🤖</div><div style="flex:1"><b>TASKVN AI</b><small style="display:block;opacity:.6">Trợ lý hệ thống</small></div><button onclick="toggleAI()">×</button></div>
+ <div class="aiBody" id="aiBody"><div class="aiBubble">Xin chào 👋 Mình có thể hướng dẫn nhiệm vụ, coin, nạp/rút và trạng thái duyệt.</div></div>
+ <form class="aiForm" onsubmit="aiSend(event)"><input class="field" id="aiInput" placeholder="Hỏi TASKVN AI..."><button class="primary">➤</button></form>
+</section>
+<script src="app.js"></script>
+<style id="taskvn-task-upgrade">
+.task-limit{font-size:10px;color:#a99fba;margin-top:4px}
+.task-cooldown{display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 9px;border-radius:10px;background:#120b1d;border:1px solid #fff1;color:#ffb9e8;font-weight:900;font-size:11px;white-space:nowrap}
+.task-cooldown strong{color:#fff}
+.task-admin-badge{font-size:9px;padding:4px 6px;border-radius:7px;background:#28133e;color:#d8a8ff}
+</style>
+<script>
+/* TASKVN TASK ENGINE V1
+   - Reward is always supplied by the server/database.
+   - Claim codes are server generated.
+   - Daily/24h limits are server enforced.
+   - Client countdown is presentation only.
+*/
+window.TASKVN_TASK_ENGINE = {
+  api: "/api",
+  start: async function(taskId){
+    const r = await fetch(this.api,{
+      method:"POST",headers:{"content-type":"application/json"},
+      body:JSON.stringify({action:"start_task",task_id:String(taskId)})
+    });
+    if(!r.ok) throw new Error("START_TASK_FAILED");
+    return r.json();
+  },
+  verify: async function(claimId,code){
+    const r = await fetch(this.api,{
+      method:"POST",headers:{"content-type":"application/json"},
+      body:JSON.stringify({action:"verify_task_code",claim_id:String(claimId),code:String(code)})
+    });
+    return r.json();
+  }
+};
+</script>
+
+
+<script>
+window.TASKVN_COOLDOWN={
+ format(sec){sec=Math.max(0,Math.floor(sec));const d=Math.floor(sec/86400);sec%=86400;
+ const h=String(Math.floor(sec/3600)).padStart(2,"0");sec%=3600;
+ const m=String(Math.floor(sec/60)).padStart(2,"0");const s=String(sec%60).padStart(2,"0");
+ return d?`${d}d ${h}:${m}:${s}`:`${h}:${m}:${s}`;},
+ start(el,seconds,onDone){let left=Math.max(0,Number(seconds)||0);
+ const tick=()=>{if(!el)return;if(left<=0){el.textContent="Làm nhiệm vụ";onDone&&onDone();return}
+ el.textContent="Còn "+this.format(left);left--;setTimeout(tick,1000)};tick();}
+};
+</script>
+<!-- TASKVN AUTH -->
+<div id="taskvn-auth" class="taskvn-auth" aria-hidden="true">
+  <div class="taskvn-auth-card">
+    <button class="taskvn-auth-close" id="taskvn-auth-close" aria-label="Đóng">×</button>
+    <div class="taskvn-auth-logo">TV</div>
+    <h2 id="taskvn-auth-title">Đăng nhập TASKVN</h2>
+    <p id="taskvn-auth-subtitle">Đăng nhập để quản lý nhiệm vụ và số dư.</p>
+
+    <form id="taskvn-auth-form">
+      <label>Email</label>
+      <input id="taskvn-email" type="email" autocomplete="email" required placeholder="you@example.com">
+      <label>Mật khẩu</label>
+      <input id="taskvn-password" type="password" autocomplete="current-password" minlength="6" required placeholder="••••••••">
+      <div id="taskvn-auth-confirm-wrap" hidden>
+        <label>Nhập lại mật khẩu</label>
+        <input id="taskvn-password-confirm" type="password" autocomplete="new-password" minlength="6" placeholder="••••••••">
+      </div>
+      <button class="taskvn-auth-submit" type="submit" id="taskvn-auth-submit">Đăng nhập</button>
+    </form>
+
+    <button class="taskvn-auth-link" id="taskvn-auth-switch">Chưa có tài khoản? Đăng ký</button>
+    <button class="taskvn-auth-link" id="taskvn-auth-reset">Quên mật khẩu?</button>
+    <div id="taskvn-auth-status" role="status"></div>
+  </div>
+</div>
+<style>
+.taskvn-auth{position:fixed;inset:0;z-index:99999;display:none;place-items:center;padding:18px;background:#05030acc;backdrop-filter:blur(12px)}
+.taskvn-auth.open{display:grid}
+.taskvn-auth-card{position:relative;width:min(430px,100%);padding:28px;border:1px solid #ffffff18;border-radius:24px;background:linear-gradient(145deg,#180d28,#09050f);box-shadow:0 30px 100px #000c,0 0 45px #8b4dff20;color:#fff}
+.taskvn-auth-logo{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;margin-bottom:14px;background:linear-gradient(135deg,#ff2bb7,#7048ff);font-weight:1000;box-shadow:0 0 30px #ff2bb755}
+.taskvn-auth h2{margin:0 0 6px}.taskvn-auth p{margin:0 0 20px;color:#aaa0b7;font-size:13px}
+.taskvn-auth label{display:block;margin:12px 0 6px;font-size:12px;color:#cfc4d8}
+.taskvn-auth input{box-sizing:border-box;width:100%;padding:13px 14px;border-radius:12px;border:1px solid #ffffff16;background:#0b0711;color:#fff;outline:none}
+.taskvn-auth input:focus{border-color:#a85cff;box-shadow:0 0 0 3px #a85cff18}
+.taskvn-auth-submit{width:100%;margin-top:18px;padding:13px;border:0;border-radius:12px;background:linear-gradient(90deg,#ff2bb7,#744bff);color:#fff;font-weight:900;cursor:pointer}
+.taskvn-auth-link{display:block;width:100%;margin-top:11px;border:0;background:none;color:#cdaeff;cursor:pointer}
+.taskvn-auth-close{position:absolute;right:15px;top:12px;border:0;background:none;color:#aaa;font-size:28px;cursor:pointer}
+#taskvn-auth-status{margin-top:14px;min-height:18px;font-size:12px;color:#ffb9e8}
+</style>
+
+
+<!-- Hidden Admin Gate -->
+<div id="taskvn-admin-gate" class="taskvn-admin-gate" aria-hidden="true">
+  <div class="taskvn-admin-gate-card">
+    <button id="taskvn-admin-gate-close" class="taskvn-admin-close">×</button>
+    <div class="taskvn-admin-lock">🔐</div>
+    <h3>Admin Access</h3>
+    <p>Nhập mã truy cập để mở đăng nhập Admin.</p>
+    <input id="taskvn-admin-gate-code" inputmode="numeric" maxlength="4" type="password" placeholder="Mã 4 số">
+    <button id="taskvn-admin-gate-submit">Xác nhận</button>
+    <div id="taskvn-admin-gate-status"></div>
+  </div>
+</div>
+<style>
+.taskvn-admin-gate{display:none;position:fixed;inset:0;z-index:100000;place-items:center;background:#05030add;backdrop-filter:blur(14px);padding:18px}
+.taskvn-admin-gate.open{display:grid}
+.taskvn-admin-gate-card{position:relative;width:min(360px,100%);padding:28px;border-radius:24px;border:1px solid #ffffff18;background:linear-gradient(145deg,#1b0d2b,#09050f);box-shadow:0 30px 100px #000;color:#fff;text-align:center}
+.taskvn-admin-close{position:absolute;right:12px;top:8px;border:0;background:none;color:#aaa;font-size:28px;cursor:pointer}
+.taskvn-admin-lock{font-size:38px;margin-bottom:8px}
+.taskvn-admin-gate-card p{color:#aaa;font-size:13px}
+.taskvn-admin-gate-card input{width:100%;box-sizing:border-box;padding:13px;border-radius:12px;border:1px solid #ffffff18;background:#0b0711;color:#fff;text-align:center;letter-spacing:8px;font-size:20px;outline:none}
+.taskvn-admin-gate-card button:not(.taskvn-admin-close){width:100%;margin-top:14px;padding:13px;border:0;border-radius:12px;background:linear-gradient(90deg,#ff2bb7,#744bff);color:#fff;font-weight:900}
+#taskvn-admin-gate-status{margin-top:12px;font-size:12px;color:#ff9fdc;min-height:16px}
+</style>
+
+
+<section id="taskvn-wallet-panel" class="taskvn-wallet-panel">
+  <div class="tw-wallet-head">
+    <div><span class="tw-kicker">TÀI CHÍNH</span><h2>Ví & giao dịch</h2></div>
+    <div class="tw-wallet-balance"><small>Số dư</small><b id="tw-wallet-balance">0đ</b></div>
+  </div>
+  <div class="tw-wallet-grid">
+    <div class="tw-wallet-card">
+      <h3>💸 Rút tiền</h3>
+      <p>MoMo hoặc ngân hàng • tối thiểu <b>50.000đ</b></p>
+      <select id="tw-payout-method"><option value="momo">MoMo</option><option value="bank">Ngân hàng</option></select>
+      <input id="tw-payout-name" placeholder="Tên chủ tài khoản">
+      <input id="tw-payout-target" placeholder="SĐT MoMo hoặc số tài khoản">
+      <input id="tw-payout-bank" placeholder="Tên ngân hàng" hidden>
+      <input id="tw-payout-amount" type="number" min="50000" step="1000" placeholder="Số tiền, tối thiểu 50.000đ">
+      <button id="tw-payout-submit">Gửi yêu cầu rút</button>
+      <div id="tw-payout-status"></div>
+    </div>
+    <div class="tw-wallet-card">
+      <h3>🛒 Nạp vào Shop</h3>
+      <p>Không còn nạp thẻ cào • tối thiểu <b>10.000đ</b></p>
+      <input id="tw-shop-account" placeholder="Tên tài khoản Shop">
+      <input id="tw-topup-amount" type="number" min="10000" step="1000" placeholder="Số tiền, tối thiểu 10.000đ">
+      <button id="tw-topup-submit">Tạo yêu cầu nạp Shop</button>
+      <div id="tw-topup-status"></div>
+    </div>
+  </div>
+  <div class="tw-withdraw-history">
+    <div class="tw-section-title"><h3>Yêu cầu rút của tôi</h3><button id="tw-refresh-payouts">Làm mới</button></div>
+    <div id="tw-payout-list"><div class="tw-empty">Chưa có yêu cầu rút.</div></div>
+  </div>
+</section>
+<style>
+.taskvn-wallet-panel{max-width:1100px;margin:30px auto;padding:22px;border:1px solid #ffffff10;border-radius:22px;background:#ffffff05;color:#fff}
+.tw-wallet-head,.tw-section-title{display:flex;justify-content:space-between;align-items:center;gap:15px}.tw-kicker{font-size:9px;color:#bda6d4;letter-spacing:2px}.tw-wallet-head h2{margin:5px 0}.tw-wallet-balance{padding:10px 15px;border-radius:13px;background:#ffffff07;border:1px solid #ffffff0b;text-align:right}.tw-wallet-balance small{display:block;color:#8e8497;font-size:9px}.tw-wallet-balance b{font-size:18px}
+.tw-wallet-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.tw-wallet-card{padding:18px;border-radius:17px;background:#ffffff04;border:1px solid #ffffff0c}.tw-wallet-card h3{margin:0 0 6px}.tw-wallet-card p{font-size:11px;color:#9990a2;line-height:1.5}.tw-wallet-card input,.tw-wallet-card select{box-sizing:border-box;width:100%;margin-top:9px;padding:12px;border-radius:10px;border:1px solid #ffffff12;background:#0b0710;color:#fff}.tw-wallet-card button{width:100%;margin-top:12px;padding:12px;border:0;border-radius:10px;background:linear-gradient(90deg,#ff2bb7,#744bff);color:#fff;font-weight:900}
+#tw-payout-status,#tw-topup-status{min-height:16px;margin-top:9px;font-size:11px;color:#ffb6e4}.tw-withdraw-history{margin-top:24px}.tw-section-title h3{margin:0}.tw-section-title button{padding:7px 10px;border-radius:9px;border:1px solid #ffffff12;background:#ffffff06;color:#fff}.tw-empty{padding:20px;text-align:center;color:#777080;font-size:12px}.tw-payout-item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:14px 0;border-bottom:1px solid #ffffff09;font-size:12px}.tw-payout-item small{display:block;color:#81778b;margin-top:4px}.tw-status{padding:5px 8px;border-radius:8px;background:#ffffff08}
+@media(max-width:700px){.tw-wallet-grid{grid-template-columns:1fr}.taskvn-wallet-panel{margin:20px 12px;padding:15px}}
+</style>
+
+</body></html>

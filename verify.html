@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TASKVN - Xác nhận</title>
+<style>body{font-family:system-ui;background:#0b1020;color:#fff;display:grid;place-items:center;min-height:100vh;margin:0}.card{width:min(92%,520px);background:#151c32;border-radius:20px;padding:28px}button{width:100%;padding:14px;border:0;border-radius:12px;background:#5b7cfa;color:#fff;font-weight:700}.status{padding:15px;background:#0d1428;border-radius:12px;margin:18px 0}.ok{color:#56e39f}.warn{color:#ffd166}</style></head>
+<body><main class="card"><h1>🔐 TASKVN</h1><h2>Xác nhận nhiệm vụ</h2><div class="status" id="status">Đang kiểm tra...</div><button id="check">Kiểm tra lại</button><p><small>Chỉ server mới quyết định nhiệm vụ có hợp lệ. Mở trang này không tự cộng tiền.</small></p></main>
+<script>
+const claim=new URLSearchParams(location.search).get("claim_id"),box=document.querySelector("#status");
+async function verify(){if(!claim){box.innerHTML='<span class="warn">Thiếu claim_id.</span>';return}box.textContent="Đang xác minh...";try{let r=await fetch("/api/verify-destination",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({claim_id:claim})});let d=await r.json();box.innerHTML=d.status==="paid"?'<span class="ok">✅ Đã xác nhận và cộng COIN.</span>':d.status==="manual_review"?'<span class="warn">⚠️ Đã chuyển Admin kiểm tra.</span>':d.status==="verified"?'<span class="ok">✅ Đã xác minh.</span>':(d.message||"Chưa có xác nhận hợp lệ.")}catch(e){box.textContent="Không kết nối được máy chủ."}}
+document.querySelector("#check").onclick=verify;verify();
+</script>
+<script>
+(async()=>{
+  const q=new URLSearchParams(location.search);
+  const claimId=q.get("claim_id")||q.get("claimId");
+  if(!claimId)return;
+  const raw=sessionStorage.getItem("taskvn_claim_"+claimId);
+  if(raw){try{sessionStorage.removeItem("taskvn_claim_"+claimId)}catch{}}
+  // The server remains authoritative. Once verification succeeds, the claim
+  // is permanently consumed; the browser copy is cleared immediately.
+})();
+</script></body></html>
